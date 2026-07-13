@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nova Casa — A sua casa está pronta para ir a mercado?</title>
+<meta name="description" content="Responda a algumas perguntas e receba um diagnóstico de prontidão de venda: documentos em falta, posicionamento de preço e tempo estimado até vender.">
+
+<!-- ══════════════════════════════════════════════════════════
+     META PIXEL — substituir PIXEL_ID_AQUI pelo Pixel DESTE cliente
+     (enquanto for o placeholder, o pixel não é carregado — modo demo)
+     ══════════════════════════════════════════════════════════ -->
+<script>
+  var PIXEL_ID = 'PIXEL_ID_AQUI';
+  var PIXEL_ATIVO = PIXEL_ID.indexOf('AQUI') === -1;
+  if (PIXEL_ATIVO) {
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
+    (window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', PIXEL_ID);
+    fbq('track', 'PageView');
+  }
+</script>
+<noscript><img height="1" width="1" style="display:none" alt="" src="https://www.facebook.com/tr?id=PIXEL_ID_AQUI&ev=PageView&noscript=1"/></noscript>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  /* ── BLOCO 1 · CORES (substituir por cliente) ── */
+  --principal:#0E4D45;      /* verde profundo */
+  --destaque:#C2703D;       /* terracota */
+  --fundo:#F7F4EF;
+  --texto:#14201E;
+  --texto-suave:#5C6B67;
+  --borda:#E2DCD1;
+  --branco:#FFFFFF;
+  --erro:#C0392B;
+  --erro-bg:#FDF0EE;
+  --radius:14px;
+  --shadow:0 1px 2px rgba(20,32,30,.04), 0 8px 30px rgba(20,32,30,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background:var(--fundo);color:var(--texto);
+  line-height:1.6;-webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,.serif{font-family:'Fraunces',Georgia,serif;font-weight:600;line-height:1.18;letter-spacing:-.01em}
+
+/* ─────────── HERO · split editorial ─────────── */
+.hero{
+  min-height:100svh;background:var(--fundo);color:var(--texto);
+  padding:20px 20px 30px;position:relative;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:center;
+}
+/* textura subtil de fundo, sem imagem */
+.hero::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(1100px 520px at 88% -6%, rgba(194,112,61,.10), transparent 62%),
+             radial-gradient(900px 480px at -12% 104%, rgba(14,77,69,.09), transparent 60%);
+}
+.hero-inner{max-width:1060px;margin:0 auto;width:100%;position:relative}
+
+.logo{display:inline-flex;align-items:center;gap:10px}
+.logo-mark{
+  width:40px;height:40px;border-radius:10px;background:var(--principal);
+  display:grid;place-items:center;font-family:'Fraunces',serif;font-weight:600;
+  font-size:15px;letter-spacing:.02em;color:#fff;
+}
+.logo-nome{font-family:'Fraunces',serif;font-size:16px;letter-spacing:.05em;text-transform:uppercase;color:var(--principal)}
+
+/* em mobile a FOTO vem primeiro — nunca abaixo da dobra */
+.hero-grid{display:grid;gap:22px;padding:22px 0 0}
+.visual{order:-1}
+
+.eyebrow{
+  display:flex;align-items:center;gap:9px;font-size:10px;letter-spacing:.17em;
+  text-transform:uppercase;color:var(--destaque);font-weight:600;margin-bottom:14px;
+}
+.eyebrow::before{content:'';width:18px;height:1.5px;background:var(--destaque);flex:none}
+
+.hero h1{
+  font-size:clamp(27px,7.4vw,52px);
+  line-height:1.1;
+  letter-spacing:-.026em;
+  margin-bottom:14px;
+  text-wrap:balance;               /* evita a linha órfã de 1 palavra */
+  hyphens:none;
+}
+/* a 2.ª frase ganha vida própria: itálica, terracota, um degrau mais pequena */
+.hero h1 em{
+  display:block;margin-top:9px;
+  font-style:italic;font-weight:400;color:var(--destaque);
+  font-size:.7em;line-height:1.2;letter-spacing:-.012em;
+}
+.hero p.sub{
+  font-size:15px;line-height:1.58;color:var(--texto-suave);
+  max-width:480px;margin-bottom:20px;text-wrap:pretty;
+}
+
+.btn{
+  display:block;width:100%;border:0;cursor:pointer;font-family:'Inter',sans-serif;
+  font-size:16px;font-weight:600;padding:17px 24px;border-radius:var(--radius);
+  transition:transform .15s ease, opacity .15s ease, background .15s ease;
+}
+.btn:active{transform:scale(.985)}
+.btn-primary{background:var(--principal);color:#fff;box-shadow:0 8px 24px rgba(14,77,69,.24)}
+.btn-primary:hover{background:#0B3F39}
+.btn-primary:disabled{opacity:.55;cursor:not-allowed;box-shadow:none}
+.btn-ghost{background:transparent;color:var(--texto-suave);border:1px solid var(--borda)}
+.seta{display:inline-block;margin-left:8px;transition:transform .2s ease}
+#btn-comecar:hover .seta{transform:translateX(4px)}
+
+.selos{
+  display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:16px;
+  font-size:12.5px;color:var(--texto-suave);
+}
+.selos span{display:flex;align-items:center;gap:6px}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--destaque);flex:none}
+
+/* ── coluna visual ── */
+.visual{position:relative}
+.foto{
+  border-radius:18px;overflow:hidden;box-shadow:var(--shadow);
+  aspect-ratio:16/10;max-height:34svh;background:var(--principal);
+}
+.foto img{width:100%;height:100%;object-fit:cover;display:block}
+
+/* em mobile o cartão flutua DENTRO da foto (não empurra o layout) */
+.stat{
+  position:absolute;left:10px;right:10px;bottom:10px;
+  display:flex;align-items:center;gap:13px;
+  background:rgba(255,255,255,.93);backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,.6);border-radius:13px;
+  padding:11px 14px;box-shadow:0 8px 24px rgba(20,32,30,.18);
+}
+.stat b{
+  font-family:'Fraunces',serif;font-size:25px;font-weight:600;
+  color:var(--destaque);line-height:1;flex:none;
+}
+.stat span{font-size:12px;color:var(--texto);line-height:1.4;display:block;opacity:.82}
+
+/* ─────────── QUIZ ─────────── */
+.quiz{display:none;min-height:100svh;padding:0 0 56px}
+.quiz.on{display:block}
+
+.topo{
+  position:sticky;top:0;z-index:10;background:rgba(247,244,239,.92);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--borda);
+  padding:16px 22px 14px;
+}
+.topo-inner{max-width:640px;margin:0 auto}
+.topo-linha{display:flex;justify-content:space-between;align-items:center;margin-bottom:11px}
+.topo-marca{display:flex;align-items:center;gap:9px}
+.topo-marca .logo-mark{width:30px;height:30px;font-size:12px;border-radius:8px}
+.topo-marca b{font-family:'Fraunces',serif;font-size:13px;letter-spacing:.05em;text-transform:uppercase;font-weight:600}
+.contador{font-size:12px;color:var(--texto-suave);font-weight:500;letter-spacing:.02em}
+.barra{height:4px;background:var(--borda);border-radius:99px;overflow:hidden}
+.barra i{display:block;height:100%;width:20%;background:var(--principal);border-radius:99px;transition:width .45s cubic-bezier(.4,0,.2,1)}
+
+.passos{max-width:640px;margin:0 auto;padding:34px 22px 0}
+.passo{display:none;animation:sobe .38s cubic-bezier(.4,0,.2,1)}
+.passo.on{display:block}
+@keyframes sobe{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+.passo > h2{font-size:clamp(23px,5.6vw,30px);margin-bottom:8px}
+.passo > p.intro{color:var(--texto-suave);font-size:15px;margin-bottom:30px}
+
+.campo{margin-bottom:26px}
+.campo.oculto{display:none}
+.campo > label, .campo > .rot{
+  display:block;font-size:14px;font-weight:600;margin-bottom:10px;color:var(--texto);
+}
+.campo .ajuda{display:block;font-weight:400;font-size:13px;color:var(--texto-suave);margin-top:3px}
+
+/* grelhas de opções */
+.grelha{display:grid;gap:9px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+.op{
+  background:var(--branco);border:1.5px solid var(--borda);border-radius:11px;
+  padding:14px 13px;font:500 14.5px 'Inter',sans-serif;color:var(--texto);
+  cursor:pointer;text-align:center;transition:all .15s ease;
+}
+.op:hover{border-color:#CFC6B6}
+.op.sel{border-color:var(--principal);background:#EDF3F1;color:var(--principal);font-weight:600;box-shadow:inset 0 0 0 1px var(--principal)}
+.lista .op{text-align:left;display:flex;align-items:center;gap:11px}
+.lista .op::before{
+  content:'';width:17px;height:17px;border-radius:50%;border:1.5px solid var(--borda);
+  flex:none;transition:all .15s ease;
+}
+.lista .op.sel::before{border:5px solid var(--principal);background:#fff}
+.chips .op{text-align:left;display:flex;align-items:center;gap:10px}
+.chips .op::before{
+  content:'';width:17px;height:17px;border-radius:5px;border:1.5px solid var(--borda);
+  flex:none;transition:all .15s ease;
+}
+.chips .op.sel::before{
+  background:var(--principal);border-color:var(--principal);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M3.5 8.5l3 3 6-7' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-size:contain;
+}
+
+input[type=text],input[type=tel],input[type=email],input[type=number],select{
+  width:100%;background:var(--branco);border:1.5px solid var(--borda);border-radius:11px;
+  padding:14px 14px;font:400 16px 'Inter',sans-serif;color:var(--texto);
+  transition:border-color .15s ease, box-shadow .15s ease;
+}
+input:focus,select:focus{outline:0;border-color:var(--principal);box-shadow:0 0 0 3px rgba(14,77,69,.1)}
+select{
+  appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%235C6B67' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 15px center;background-size:12px;
+  padding-right:40px;
+}
+.dupla{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+
+/* erro */
+.campo.erro .op:not(.sel){border-color:#E8B4AD}
+.campo.erro input,.campo.erro select{border-color:var(--erro);background:var(--erro-bg)}
+.msg-erro{display:none;color:var(--erro);font-size:13px;font-weight:500;margin-top:8px;align-items:center;gap:6px}
+.campo.erro .msg-erro{display:flex}
+
+/* navegação */
+.nav{display:flex;gap:10px;margin-top:34px}
+.nav .btn-ghost{flex:0 0 34%}
+.nav .btn-primary{flex:1}
+.nav.só-frente .btn-ghost{display:none}
+
+.rgpd{
+  margin-top:20px;font-size:12px;color:var(--texto-suave);line-height:1.5;
+  display:flex;gap:9px;align-items:flex-start;
+}
+.rgpd input{width:17px;height:17px;flex:none;margin-top:2px;accent-color:var(--principal)}
+.campo.erro .rgpd{color:var(--erro)}
+.rgpd a{color:var(--principal)}
+
+.rodape{
+  max-width:640px;margin:44px auto 0;padding:0 22px;
+  font-size:12px;color:var(--texto-suave);text-align:center;
+}
+/* ecrãs baixos (ex: iPhone SE) — encolhe a foto para o CTA não sair do ecrã */
+@media(max-height:700px){
+  .foto{max-height:26svh}
+  .hero-grid{gap:16px;padding-top:14px}
+}
+@media(min-width:560px){
+  .hero{padding:34px 32px 56px}
+  .passos{padding-top:44px}
+  .btn-primary, .selos{max-width:420px}
+  .foto{max-height:42svh}
+}
+@media(min-width:900px){
+  .hero{justify-content:center}
+  .hero-grid{
+    grid-template-columns:1fr 1fr;gap:64px;align-items:center;padding:0;
+  }
+  .visual{order:0}
+  .foto{aspect-ratio:4/3;max-height:none;border-radius:20px}
+  .hero .logo{position:absolute;top:-70px;left:0}
+  .hero-texto{padding-top:8px}
+  /* no desktop volta a ser o cartão branco sólido a sair da foto */
+  .stat{
+    left:-34px;right:auto;bottom:-28px;max-width:265px;display:block;
+    background:var(--branco);border:1px solid var(--borda);
+    backdrop-filter:none;padding:16px 18px;border-radius:14px;
+    box-shadow:var(--shadow);
+  }
+  .stat b{display:block;font-size:30px;margin-bottom:5px}
+  .stat span{font-size:13px;color:var(--texto-suave);opacity:1;line-height:1.45}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section class="hero" id="hero">
+  <div class="hero-inner">
+    <div class="logo">
+      <span class="logo-mark" aria-hidden="true">NC</span>
+      <span class="logo-nome">Nova Casa</span>
+    </div>
+
+    <div class="hero-grid">
+      <div class="hero-texto">
+        <span class="eyebrow">Diagnóstico gratuito para quem vai vender</span>
+        <h1>A sua casa está pronta para ir a mercado? <em>Ou vai ficar meses à espera?</em></h1>
+        <p class="sub">Duas casas iguais, na mesma rua: uma vende em 6 semanas, a outra fica 8 meses. A diferença raramente é o imóvel — é um documento em falta ou um preço mal ancorado. Descubra onde está a sua.</p>
+        <button class="btn btn-primary" id="btn-comecar">
+          Começar o diagnóstico<span class="seta" aria-hidden="true">→</span>
+        </button>
+        <div class="selos">
+          <span><i class="dot" aria-hidden="true"></i>3 minutos</span>
+          <span><i class="dot" aria-hidden="true"></i>Sem compromisso</span>
+          <span><i class="dot" aria-hidden="true"></i>Resultado imediato</span>
+        </div>
+      </div>
+
+      <div class="visual">
+        <div class="foto">
+          <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=900&q=85"
+               alt="Interior claro e arrumado de uma casa preparada para visitas" loading="eager" width="900" height="675">
+        </div>
+        <div class="stat">
+          <b>7 em 10</b>
+          <span>vendedores anunciam sem ter os documentos obrigatórios prontos.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ QUIZ ═══════════════ -->
+<main class="quiz" id="quiz">
+  <div class="topo">
+    <div class="topo-inner">
+      <div class="topo-linha">
+        <div class="topo-marca">
+          <span class="logo-mark" aria-hidden="true">NC</span>
+          <b>Nova Casa</b>
+        </div>
+        <span class="contador" id="contador">Passo 1 de 5</span>
+      </div>
+      <div class="barra" role="progressbar" aria-label="Progresso do diagnóstico" aria-valuemin="1" aria-valuemax="5" aria-valuenow="1">
+        <i id="barra"></i>
+      </div>
+    </div>
+  </div>
+
+  <form class="passos" id="form" novalidate>
+
+    <!-- ── PASSO 1 · O IMÓVEL ── -->
+    <section class="passo on" data-passo="1">
+      <h2>Comecemos pelo imóvel</h2>
+      <p class="intro">Precisamos de saber o que está a vender antes de perceber quão pronto está.</p>
+
+      <div class="campo" data-req="tipo">
+        <span class="rot" id="rot-tipo">Que tipo de imóvel vai vender?</span>
+        <div class="grelha g2 opcoes" data-campo="tipo" role="group" aria-labelledby="rot-tipo">
+          <button type="button" class="op" data-v="Apartamento">Apartamento</button>
+          <button type="button" class="op" data-v="Moradia">Moradia</button>
+          <button type="button" class="op" data-v="Terreno">Terreno</button>
+          <button type="button" class="op" data-v="Outro">Outro</button>
+        </div>
+        <span class="msg-erro">Escolha uma opção para continuar.</span>
+      </div>
+
+      <div class="campo" data-req="tipologia" id="c-tipologia">
+        <span class="rot" id="rot-tipologia">Qual é a tipologia?</span>
+        <div class="grelha g4 opcoes" data-campo="tipologia" role="group" aria-labelledby="rot-tipologia">
+          <button type="button" class="op" data-v="T0/T1">T0/T1</button>
+          <button type="button" class="op" data-v="T2">T2</button>
+          <button type="button" class="op" data-v="T3">T3</button>
+          <button type="button" class="op" data-v="T4+">T4+</button>
+        </div>
+        <span class="msg-erro">Escolha uma opção para continuar.</span>
+      </div>
+
+      <div class="campo" data-req="area">
+        <label for="area">Área aproximada <span class="ajuda">Em metros quadrados. Um valor aproximado chega.</span></label>
+        <input type="number" id="area" inputmode="numeric" min="10" max="5000" placeholder="Ex: 95">
+        <span class="msg-erro">Indique uma área válida (entre 10 e 5000 m²).</span>
+      </div>
+
+      <div class="campo" data-req="concelho">
+        <label for="concelho">Onde fica o imóvel? <span class="ajuda">Concelho e, se quiser, a freguesia.</span></label>
+        <input type="text" id="concelho" autocomplete="address-level2" placeholder="Ex: Cascais, São Domingos de Rana">
+        <span class="msg-erro">Indique pelo menos o concelho.</span>
+      </div>
+
+      <div class="campo" data-req="ano">
+        <label for="ano">Ano aproximado de construção</label>
+        <select id="ano">
+          <option value="">Selecione…</option>
+          <option>Antes de 1980</option>
+          <option>Entre 1980 e 2000</option>
+          <option>Entre 2001 e 2015</option>
+          <option>Depois de 2015</option>
+          <option>Não sei ao certo</option>
+        </select>
+        <span class="msg-erro">Escolha uma opção para continuar.</span>
+      </div>
+
+      <div class="nav só-frente">
+        <button type="button" class="btn btn-ghost" data-voltar>Voltar</button>
+        <button type="button" class="btn btn-primary" data-avancar>Continuar</button>
+      </div>
+    </section>
+
+    <!-- ── PASSO 2 · TITULARIDADE E DOCUMENTOS ── -->
+    <section class="passo" data-passo="2">
+      <h2>Quem é o dono e o que já tem em mãos</h2>
+      <p class="intro">É aqui que a maioria das vendas trava. Vale a pena responder com calma.</p>
+
+      <div class="campo" data-req="titular">
+        <span class="rot" id="rot-titular">Quem consta como proprietário?</span>
+        <div class="grelha lista opcoes" data-campo="titular" role="group" aria-labelledby="rot-titular">
+          <button type="button" class="op" data-v="Só eu">Só eu</button>
+          <button type="button" class="op" data-v="Eu e cônjuge">Eu e o meu cônjuge</button>
+          <button type="button" class="op" data-v="Herança / partilha">É uma herança ou partilha</button>
+          <button type="button" class="op" data-v="Vários proprietários">Vários proprietários</button>
+        </div>
+        <span class="msg-erro">Escolha uma opção para continuar.</span>
+      </div>
+
+      <div class="campo oculto" data-req="acordo" id="c-acordo">
+        <span class="rot" id="rot-acordo">Estão todos de acordo em vender?</span>
+        <div class="grelha lista opcoes" data-campo="acordo" role="group" aria-labelledby="rot-acordo">
+          <button type="button" class="op" data-v="Sim, todos de acordo">Sim, está tudo acordado</button>
+          <button type="button" class="op" data-v="Ainda não há acordo">Ainda não há acordo entre todos</button>
+          <button type="button" class="op" data-v="Não sei">Não sei / ainda não falámos</button>
+        </div>
+        <span class="msg-erro">Escolha uma opção para continuar.</span>
+      </div>
+
+      <div class="campo" data-req="docs">
+        <span class="rot" id="rot-docs">Que documentos já tem? <span class="ajuda">Pode escolher vários.</span></span>
+        <div class="grelha chips opcoes" data-campo="docs" data-multi="1" role="group" aria-labelledby="rot-docs">
+          <button type="button" class="op" data-v="Caderneta predial">Caderneta predial</button>
+          <button type="button" class="op" data-v="Certidão permanente">Certidão permanente do registo</button>
+          <button type="button" class="op" data-v="Licença de utilização">Licença de utilização</button>
+          <button type="button" class="op" data-v="Certificado energético">Certificado energético</button>
+          <button type="button" class="op" data-v="Nenhum / não sei" data-exclusivo="1">Nenhum destes / não sei</button>
+        </div>
+        <span class="msg-erro">Escolha pelo menos uma opção (ou &laquo;Nenhum destes&raquo;).</span>
+      </div>
+
+      <div class="campo" data-req="onus">
+        <span class="rot" id="rot-onus">Existe algum encargo sobre o imóvel?</span>
+        <div class="grelha lista opcoes" data-campo="onus" role="group" aria-labelledby="rot-onus">
+          <button type="button" class="op" data-v="Não, está livre">Não, está livre de encargos</button>
+          <button type="button" class="op" data-v="Hipoteca (crédito habitação)">Hipoteca — tenho crédito habitação</button>
+          <button type="button" class="op" data-v="Penhora / processo judicial">Penhora ou processo judicial</button>
+          <button type="button" class="op" data-v="Usufruto">Usufruto a favor de alguém</button>
+          <button type="button" class="op" data-v="Não sei">Não sei</button>
+        </div>
+        <span class="msg-erro">Escolha uma opção para continuar.</span>
+      </div>
+
+      <div class="nav">
+        <button type="button" class="btn btn-ghost" data-voltar>Voltar</button>
+        <button type="button" class="btn btn-primary" data-avancar>Continuar</button>
+      </div>
+    </section>
+
+    <!-- ── PASSO 3 · PREÇO ── -->
+    <section class="passo" data-passo="3">
+      <h2>O preço — e de onde vem esse número</h2>
+      <p class="intro">Não há resposta errada. Só nos ajuda a perceber se o valor está ancorado no mercado.</p>
+
+      <div class="campo" data-req="valor">
+        <label for="valor">Que valor tem em mente para a venda?</label>
+        <select id="valor">
+          <option value="">Selecione uma faixa…</option>
+          <option>Até 150.000 €</option>
+          <option>150.000 € a 250.000 €</option>
+          <option>250.000 € a 400.000 €</option>
+          <option>400.000 € a 600.000 €</option>
+          <option>Mais de 600.000 €</option>
+          <option>Ainda não defini</option>
+        </select>
+        <span class="msg-erro">Escolha uma opção para continuar.</span>
+      </div>
+
+      <div class="campo" data-req="origem_valor">
+        <span class="rot" id="rot-ov">Como chegou a esse valor?</span>
+        <div class="grelha lista opcoes" data-campo="origem_valor" role="group" aria-labelledby="rot-ov">
+          <button type="button" class="op" data-v="Avaliação profissional">Fiz uma avaliação profissional</button>
+          <button type="button" class="op" data-v="Anúncios semelhantes">Vi anúncios de casas parecidas</button>
+          <button type="button" class="op" data-v="É o que preciso de receber">É o valor de que preciso para os meus planos</button>
+          <button type="button" class="op" data-v="Não faço ideia">Sinceramente, não faço ideia</button>
+        </div>
+        <span class="msg-erro">Escolha uma opção para continuar.</span>
+      </div>
+
+      <div class="campo" data-req="divida">
+        <label for="divida">Qual é o capital ainda em dívida ao banco?</label>
+        <select id="divida">
+          <option value="">Selecione…</option>
+          <option>Não tenho crédito — o imóvel está pago</option>
+          <option>Menos de 50.000 €</option>
+          <option>50.000 € a 100.000 €</option>
+          <option>100.000 € a 200.000 €</option>
+          <option>Mais de 200.000 €</option>
+          <option>Não sei ao certo</option>
+        </select>
+        <span class="msg-erro">Escolha uma opção para continuar.</span>
+      </div>
+
+      <div class="campo" data-req="flexibilidade">
+        <span class="rot" id="rot-flex">Há margem de negociação nesse valor?</span>
+        <div class="grelha lista opcoes" data-campo="flexibilidade" role="group" aria-labelledby="rot-flex">
+          <button type="button" class="op" data-v="Sim, tenho margem">Sim, tenho alguma margem</button>
+          <button type="button" class="op" data-v="Pouca margem">Pouca — só mesmo para fechar negócio</button>
+          <button type="button" class="op" data-v="Nenhuma margem">Nenhuma, é este valor</button>
+        </div>
+        <span class="msg-erro">Escolha uma opção para continuar.</span>
+      </div>
+
+      <div class="nav">
+        <button type="button" class="btn btn-ghost" data-voltar>Voltar</button>
+        <button type="button" class="btn btn-primary" data-avancar>Continuar</button>
+      </div>
+    </section>
+
+    <!-- ── PASSO 4 · MOTIVO, PRAZO, OCUPAÇÃO ── -->
+    <section class="passo" data-passo="4">
+      <h2>O seu contexto</h2>
+      <p class="intro">O porquê e o quando mudam completamente a estratégia de venda.</p>
+
+      <div class="campo" data-req="motivo">
+        <span class="rot" id="rot-motivo">Porque está a vender?</span>
+        <div class="grelha lista opcoes" data-campo="motivo" role="group" aria-labelledby="rot-motivo">
+          <button type="button" class="op" data-v="Mudar de casa">Vou mudar de casa</button>
+          <button type="button" class="op" data-v="Herança">Recebi uma herança</button>
+          <button type="button" class="op" data-v="Rentabilizar investimento">Quero rentabilizar o investimento</button>
+          <button type="button" class="op" data-v="Mudança de vida">Mudança de vida (trabalho, separação, família)</button>
+          <button type="button" class="op" data-v="Emigrar / sair do país">Vou emigrar ou sair do país</button>
+          <button type="button" class="op" data-v="Outro">Outro motivo</button>
+        </div>
+        <span class="msg-erro">Escolha uma opção para continuar.</span>
+      </div>
+
+      <div class="campo" data-req="prazo">
+        <span class="rot" id="rot-prazo">Em quanto tempo precisa de vender?</span>
+        <div class="grelha lista opcoes" data-campo="prazo" role="group" aria-labelledby="rot-prazo">
+          <button type="button" class="op" data-v="O mais rápido possível">O mais rápido possível</button>
+          <button type="button" class="op" data-v="Até 3 meses">Até 3 meses</button>
+          <button type="button" class="op" data-v="3 a 6 meses">Entre 3 e 6 meses</button>
+          <button type="button" class="op" data-v="Mais de 6 meses">Mais de 6 meses — não tenho pressa</button>
+          <button type="button" class="op" data-v="Só a explorar">Estou só a explorar a ideia</button>
+        </div>
+        <span class="msg-erro">Escolha uma opção para continuar.</span>
+      </div>
+
+      <div class="campo" data-req="ocupacao">
+        <span class="rot" id="rot-ocup">Como está o imóvel neste momento?</span>
+        <div class="grelha lista opcoes" data-campo="ocupacao" role="group" aria-labelledby="rot-ocup">
+          <button type="button" class="op" data-v="Habito lá">Vivo lá</button>
+          <button type="button" class="op" data-v="Está vazio">Está vazio</button>
+          <button type="button" class="op" data-v="Está arrendado">Está arrendado a inquilinos</button>
+          <button type="button" class="op" data-v="Uso ocasional">Uso ocasional (férias, 2.ª habitação)</button>
+        </div>
+        <span class="msg-erro">Escolha uma opção para continuar.</span>
+      </div>
+
+      <div class="campo" data-req="mercado">
+        <span class="rot" id="rot-merc">O imóvel já está à venda?</span>
+        <div class="grelha lista opcoes" data-campo="mercado" role="group" aria-labelledby="rot-merc">
+          <button type="button" class="op" data-v="Não, ainda não">Não, ainda não pus à venda</button>
+          <button type="button" class="op" data-v="Sim, agência com exclusivo">Sim, com uma agência em exclusivo</button>
+          <button type="button" class="op" data-v="Sim, agência sem exclusivo">Sim, com agência mas sem exclusivo</button>
+          <button type="button" class="op" data-v="Sim, por mim (particular)">Sim, estou a vender por minha conta</button>
+        </div>
+        <span class="msg-erro">Escolha uma opção para continuar.</span>
+      </div>
+
+      <div class="campo oculto" data-req="tempo_mercado" id="c-tempo-mercado">
+        <label for="tempo_mercado">Há quanto tempo está no mercado?</label>
+        <select id="tempo_mercado">
+          <option value="">Selecione…</option>
+          <option>Menos de 1 mês</option>
+          <option>1 a 3 meses</option>
+          <option>3 a 6 meses</option>
+          <option>Mais de 6 meses</option>
+        </select>
+        <span class="msg-erro">Escolha uma opção para continuar.</span>
+      </div>
+
+      <div class="nav">
+        <button type="button" class="btn btn-ghost" data-voltar>Voltar</button>
+        <button type="button" class="btn btn-primary" data-avancar>Continuar</button>
+      </div>
+    </section>
+
+    <!-- ── PASSO 5 · CONTACTO ── -->
+    <section class="passo" data-passo="5">
+      <h2>Para onde enviamos o seu diagnóstico?</h2>
+      <p class="intro">Os seus dados servem apenas para lhe entregar o resultado e, se quiser, agendar a avaliação.</p>
+
+      <div class="campo" data-req="nome">
+        <label for="nome">Nome completo</label>
+        <input type="text" id="nome" autocomplete="name" placeholder="Ex: Maria Fernandes">
+        <span class="msg-erro">Indique o seu nome completo.</span>
+      </div>
+
+      <div class="campo" data-req="tel">
+        <label for="tel">Telemóvel</label>
+        <input type="tel" id="tel" autocomplete="tel" inputmode="tel" placeholder="Ex: 912 345 678">
+        <span class="msg-erro">Indique um número de telemóvel válido (mínimo 9 dígitos).</span>
+      </div>
+
+      <div class="campo" data-req="email">
+        <label for="email">E-mail</label>
+        <input type="email" id="email" autocomplete="email" inputmode="email" placeholder="Ex: maria@email.com">
+        <span class="msg-erro">Indique um e-mail válido.</span>
+      </div>
+
+      <div class="campo" data-req="avaliacao">
+        <span class="rot" id="rot-aval">Quer marcar uma avaliação gratuita do imóvel?</span>
+        <div class="grelha lista opcoes" data-campo="avaliacao" role="group" aria-labelledby="rot-aval">
+          <button type="button" class="op" data-v="Sim, quero marcar">Sim, quero marcar</button>
+          <button type="button" class="op" data-v="Talvez, quero saber mais">Talvez — primeiro quero saber mais</button>
+          <button type="button" class="op" data-v="Não, só o diagnóstico">Não, só queria o diagnóstico</button>
+        </div>
+        <span class="msg-erro">Escolha uma opção para continuar.</span>
+      </div>
+
+      <div class="campo" data-req="rgpd">
+        <label class="rgpd" for="rgpd">
+          <input type="checkbox" id="rgpd">
+          <span>Autorizo a <b>Nova Casa</b> a contactar-me sobre o meu diagnóstico e li a <a href="privacidade.html" target="_blank" rel="noopener">política de privacidade</a>.</span>
+        </label>
+        <span class="msg-erro">É necessário o seu consentimento para continuarmos.</span>
+      </div>
+
+      <div class="nav">
+        <button type="button" class="btn btn-ghost" data-voltar>Voltar</button>
+        <button type="button" class="btn btn-primary" id="btn-final" data-avancar>Ver o meu diagnóstico</button>
+      </div>
+    </section>
+  </form>
+
+  <p class="rodape">Diagnóstico indicativo, sem valor de avaliação oficial. © Nova Casa</p>
+</main>
+
+<script>
+/* ══════════════════════════════════════════════════════════════
+   BLOCO 1 · CONFIGURAÇÃO (substituir por cliente)
+   ══════════════════════════════════════════════════════════════ */
+const CFG = {
+  marca:        'Nova Casa',
+  origem:       'Nova Casa — Diagnóstico de Venda',
+  webhook:      '',                    // ← URL do webhook GoHighLevel DESTE cliente
+  prefixoPais:  '351',
+  chaveSessao:  'diag_novacasa'        // ← única por projeto
+};
+
+/* ══════════════════════════════════════════════════════════════
+   ESTADO
+   ══════════════════════════════════════════════════════════════ */
+const A = { docs: [] };
+const TOTAL = 5;
+let passo = 1;
+let aEnviar = false;
+
+const $  = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+
+/* ─── arranque ─── */
+$('#btn-comecar').addEventListener('click', () => {
+  $('#hero').style.display = 'none';
+  $('#quiz').classList.add('on');
+  window.scrollTo(0, 0);
+});
+
+/* ─── seleção de opções ─── */
+$$('.opcoes').forEach(grupo => {
+  const campo = grupo.dataset.campo;
+  const multi = grupo.dataset.multi === '1';
+
+  grupo.addEventListener('click', e => {
+    const op = e.target.closest('.op');
+    if (!op) return;
+    const v = op.dataset.v;
+
+    if (multi) {
+      const exclusivo = op.dataset.exclusivo === '1';
+      if (exclusivo) {
+        grupo.querySelectorAll('.op').forEach(o => o.classList.remove('sel'));
+        op.classList.add('sel');
+        A[campo] = [v];
+      } else {
+        grupo.querySelectorAll('.op[data-exclusivo]').forEach(o => o.classList.remove('sel'));
+        op.classList.toggle('sel');
+        A[campo] = grupo.querySelectorAll('.op.sel').length
+          ? Array.from(grupo.querySelectorAll('.op.sel')).map(o => o.dataset.v)
+          : [];
+      }
+    } else {
+      grupo.querySelectorAll('.op').forEach(o => o.classList.remove('sel'));
+      op.classList.add('sel');
+      A[campo] = v;
+    }
+
+    op.closest('.campo').classList.remove('erro');
+    condicionais();
+  });
+});
+
+/* inputs limpam o erro ao escrever */
+$$('input, select').forEach(el => {
+  el.addEventListener('input', () => el.closest('.campo')?.classList.remove('erro'));
+  el.addEventListener('change', () => el.closest('.campo')?.classList.remove('erro'));
+});
+
+/* ─── perguntas condicionais ─── */
+function condicionais() {
+  // tipologia não faz sentido em terreno
+  const semTipologia = A.tipo === 'Terreno';
+  $('#c-tipologia').classList.toggle('oculto', semTipologia);
+  if (semTipologia) delete A.tipologia;
+
+  // acordo entre proprietários só se houver mais do que um
+  const partilhado = A.titular === 'Herança / partilha' || A.titular === 'Vários proprietários' || A.titular === 'Eu e cônjuge';
+  $('#c-acordo').classList.toggle('oculto', !partilhado);
+  if (!partilhado) delete A.acordo;
+
+  // há quanto tempo está no mercado
+  const jaNoMercado = A.mercado && A.mercado !== 'Não, ainda não';
+  $('#c-tempo-mercado').classList.toggle('oculto', !jaNoMercado);
+  if (!jaNoMercado) { delete A.tempo_mercado; $('#tempo_mercado').value = ''; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   VALIDAÇÃO
+   ══════════════════════════════════════════════════════════════ */
+const REGEX_EMAIL = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
+
+function validarPasso(n) {
+  const sec = $(`.passo[data-passo="${n}"]`);
+  let ok = true, primeiroErro = null;
+
+  sec.querySelectorAll('.campo[data-req]').forEach(campo => {
+    if (campo.classList.contains('oculto')) return;
+
+    const chave = campo.dataset.req;
+    let valido = true;
+
+    if (chave === 'area') {
+      const v = Number($('#area').value);
+      valido = v >= 10 && v <= 5000;
+      if (valido) A.area = v + ' m²';
+    } else if (chave === 'concelho') {
+      const v = $('#concelho').value.trim();
+      valido = v.length >= 2;
+      if (valido) A.concelho = v;
+    } else if (chave === 'ano' || chave === 'valor' || chave === 'divida' || chave === 'tempo_mercado') {
+      const v = $('#' + chave).value;
+      valido = !!v;
+      if (valido) A[chave] = v;
+    } else if (chave === 'nome') {
+      const v = $('#nome').value.trim();
+      valido = v.length >= 3 && v.includes(' ');
+      if (valido) A.nome = v;
+    } else if (chave === 'tel') {
+      const v = $('#tel').value;
+      valido = (v.replace(/\D/g, '').length >= 9);
+      if (valido) A.tel = v;
+    } else if (chave === 'email') {
+      const v = $('#email').value.trim();
+      valido = REGEX_EMAIL.test(v);
+      if (valido) A.email = v;
+    } else if (chave === 'rgpd') {
+      valido = $('#rgpd').checked;
+      if (valido) A.rgpd = 'Sim';
+    } else if (chave === 'docs') {
+      valido = Array.isArray(A.docs) && A.docs.length > 0;
+    } else {
+      valido = !!A[chave];
+    }
+
+    campo.classList.toggle('erro', !valido);
+    if (!valido) { ok = false; if (!primeiroErro) primeiroErro = campo; }
+  });
+
+  if (primeiroErro) primeiroErro.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  return ok;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   NAVEGAÇÃO
+   ══════════════════════════════════════════════════════════════ */
+function mostrar(n) {
+  $$('.passo').forEach(p => p.classList.toggle('on', Number(p.dataset.passo) === n));
+  $('#contador').textContent = `Passo ${n} de ${TOTAL}`;
+  const barra = $('#barra');
+  barra.style.width = (n / TOTAL * 100) + '%';
+  barra.parentElement.setAttribute('aria-valuenow', n);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+$$('[data-avancar]').forEach(b => b.addEventListener('click', () => {
+  if (!validarPasso(passo)) return;
+  if (passo === TOTAL) return finalizar();
+  passo++; mostrar(passo);
+}));
+
+$$('[data-voltar]').forEach(b => b.addEventListener('click', () => {
+  if (passo === 1) return;
+  passo--; mostrar(passo);
+}));
+
+/* ══════════════════════════════════════════════════════════════
+   MOTOR DE DIAGNÓSTICO — 3 eixos + tempo estimado + travões
+   ══════════════════════════════════════════════════════════════ */
+const DOCS_NECESSARIOS = ['Caderneta predial', 'Certidão permanente', 'Licença de utilização', 'Certificado energético'];
+const PESO_DOC = { 'Caderneta predial': 10, 'Certidão permanente': 10, 'Licença de utilização': 15, 'Certificado energético': 25 };
+
+const limitar = n => Math.max(0, Math.min(100, Math.round(n)));
+
+function diagnosticar() {
+  const tem = Array.isArray(A.docs) ? A.docs : [];
+  const emFalta = DOCS_NECESSARIOS.filter(d => !tem.includes(d));
+  const travoes = [];
+
+  /* ── EIXO 1 · DOCUMENTAÇÃO ── */
+  let doc = 100;
+  emFalta.forEach(d => { doc -= PESO_DOC[d]; });
+
+  if (A.onus === 'Hipoteca (crédito habitação)') doc -= 5;
+  if (A.onus === 'Penhora / processo judicial')  doc -= 30;
+  if (A.onus === 'Usufruto')                     doc -= 20;
+  if (A.onus === 'Não sei')                      doc -= 10;
+
+  if (A.titular === 'Herança / partilha')     doc -= 15;
+  if (A.titular === 'Vários proprietários')   doc -= 10;
+  if (A.acordo === 'Ainda não há acordo')     doc -= 20;
+  if (A.acordo === 'Não sei')                 doc -= 15;
+  doc = limitar(doc);
+
+  /* ── EIXO 2 · PREÇO vs MERCADO ── */
+  let preco = { 'Avaliação profissional': 90, 'Anúncios semelhantes': 68, 'É o que preciso de receber': 32, 'Não faço ideia': 45 }[A.origem_valor] ?? 50;
+  if (A.flexibilidade === 'Sim, tenho margem')  preco += 10;
+  if (A.flexibilidade === 'Nenhuma margem')     preco -= 15;
+  if (A.valor === 'Ainda não defini')           preco -= 8;
+  if (A.tempo_mercado === '3 a 6 meses')        preco -= 12;
+  if (A.tempo_mercado === 'Mais de 6 meses')    preco -= 22;
+  preco = limitar(preco);
+
+  /* ── EIXO 3 · ESTADO / PRONTIDÃO ── */
+  let estado = 78;
+  if (A.ocupacao === 'Está vazio')      estado += 15;
+  if (A.ocupacao === 'Habito lá')       estado += 5;
+  if (A.ocupacao === 'Uso ocasional')   estado += 5;
+  if (A.ocupacao === 'Está arrendado')  estado -= 30;
+
+  if (A.ano === 'Antes de 1980')        estado -= 15;
+  if (A.ano === 'Entre 1980 e 2000')    estado -= 5;
+  if (A.ano === 'Depois de 2015')       estado += 8;
+  if (A.ano === 'Não sei ao certo')     estado -= 5;
+
+  if (A.prazo === 'Só a explorar')      estado -= 10;
+  estado = limitar(estado);
+
+  /* ── TEMPO ESTIMADO ── */
+  const global = doc * 0.35 + preco * 0.40 + estado * 0.25;
+  let tempo, tempoNota;
+  if (global >= 80)      { tempo = '4 a 8 semanas';   tempoNota = 'A sua casa está pronta a ir a mercado.'; }
+  else if (global >= 65) { tempo = '6 a 10 semanas';  tempoNota = 'Está quase — faltam ajustes pontuais.'; }
+  else if (global >= 50) { tempo = '2 a 4 meses';     tempoNota = 'Há pontos a resolver antes de anunciar.'; }
+  else if (global >= 35) { tempo = '4 a 6 meses';     tempoNota = 'Vários travões vão atrasar a venda.'; }
+  else                   { tempo = 'Mais de 6 meses'; tempoNota = 'Sem intervenção, a venda vai arrastar-se.'; }
+
+  /* ── TRAVÕES (por ordem de gravidade) ── */
+  if (emFalta.includes('Certificado energético'))
+    travoes.push({ t: 'Sem certificado energético', d: 'É obrigatório por lei para anunciar o imóvel. Sem ele, nem sequer pode publicar a casa nos portais.' });
+  if (A.acordo === 'Ainda não há acordo' || A.acordo === 'Não sei')
+    travoes.push({ t: 'Não há acordo entre os proprietários', d: 'A escritura precisa da assinatura de todos. Enquanto o acordo não existir, o processo não avança — mesmo com comprador na mão.' });
+  if (A.onus === 'Penhora / processo judicial')
+    travoes.push({ t: 'Existe uma penhora sobre o imóvel', d: 'Tem de ser levantada antes da escritura. Vale a pena tratar disto já, porque é o que costuma demorar mais.' });
+  if (A.ocupacao === 'Está arrendado')
+    travoes.push({ t: 'O imóvel está arrendado', d: 'Reduz drasticamente o número de compradores e afeta o preço. Há estratégias específicas para vender com inquilino — mas têm de ser pensadas à partida.' });
+  if (A.origem_valor === 'É o que preciso de receber')
+    travoes.push({ t: 'O preço está ancorado na sua necessidade, não no mercado', d: 'É o erro mais caro que um vendedor comete. O mercado não paga o que precisamos — paga o que o imóvel vale.' });
+  if (A.origem_valor === 'Não faço ideia')
+    travoes.push({ t: 'Ainda não sabe quanto vale a sua casa', d: 'Anunciar acima de mercado queima a casa nas primeiras semanas, que são as que geram mais visitas.' });
+  if (A.tempo_mercado === 'Mais de 6 meses' || A.tempo_mercado === '3 a 6 meses')
+    travoes.push({ t: 'A casa está no mercado há demasiado tempo', d: 'Quando um anúncio envelhece, os compradores assumem que há um problema. Normalmente é sinal de preço desalinhado.' });
+  if (A.mercado === 'Sim, agência com exclusivo')
+    travoes.push({ t: 'Tem um contrato de exclusividade ativo', d: 'Só pode mudar de estratégia ou de agência quando o contrato terminar. Confirme a data de fim.' });
+  if (A.onus === 'Usufruto')
+    travoes.push({ t: 'Existe usufruto sobre o imóvel', d: 'O usufrutuário tem de dar consentimento na venda. Trate disto antes de avançar.' });
+  if (emFalta.length >= 3)
+    travoes.push({ t: 'Faltam-lhe quase todos os documentos', d: 'Reunir a documentação pode levar semanas. Comece já — é o que mais atrasa vendas prontas.' });
+  if (A.flexibilidade === 'Nenhuma margem' && A.prazo === 'O mais rápido possível')
+    travoes.push({ t: 'Quer vender depressa mas sem ceder no preço', d: 'Velocidade e preço máximo raramente andam juntos. Vai ter de escolher qual dos dois é prioridade.' });
+
+  return {
+    doc, preco, estado, global: Math.round(global),
+    tempo, tempoNota,
+    emFalta, temDocs: tem,
+    travoes: travoes.slice(0, 3)
+  };
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ENVIO — normalização E.164, webhook GHL, pixel, redirect
+   ══════════════════════════════════════════════════════════════ */
+function normalizarTel(v) {
+  let d = (v || '').replace(/\D/g, '');
+  if (!d) return '';
+  if (d.indexOf('00') === 0) d = d.slice(2);
+  if (d.length === 9) d = CFG.prefixoPais + d;
+  return '+' + d;
+}
+
+function enviarWebhook(tel, first, last, D, eventId) {
+  const payload = {
+    /* chaves padrão que o GoHighLevel mapeia sozinho */
+    name:        A.nome,
+    first_name:  first,
+    last_name:   last,
+    phone:       tel,          // E.164 obrigatório
+    email:       A.email,
+
+    /* metadados */
+    timestamp:   new Date().toISOString(),
+    origem:      CFG.origem,
+    pagina_url:  window.location.href,
+    event_id:    eventId,
+    consentimento_rgpd: A.rgpd || 'Não',
+
+    /* respostas com rótulos legíveis */
+    imovel_tipo:        A.tipo || '',
+    imovel_tipologia:   A.tipologia || 'N/A',
+    imovel_area:        A.area || '',
+    imovel_localizacao: A.concelho || '',
+    imovel_ano:         A.ano || '',
+    titularidade:       A.titular || '',
+    acordo_venda:       A.acordo || 'N/A',
+    documentos_que_tem: (A.docs || []).join(', ') || 'Nenhum',
+    documentos_em_falta:D.emFalta.join(', ') || 'Nenhum',
+    encargos:           A.onus || '',
+    valor_pretendido:   A.valor || '',
+    origem_do_valor:    A.origem_valor || '',
+    capital_em_divida:  A.divida || '',
+    flexibilidade_preco:A.flexibilidade || '',
+    motivo_venda:       A.motivo || '',
+    prazo_venda:        A.prazo || '',
+    ocupacao:           A.ocupacao || '',
+    ja_no_mercado:      A.mercado || '',
+    tempo_no_mercado:   A.tempo_mercado || 'N/A',
+    quer_avaliacao:     A.avaliacao || '',
+
+    /* diagnóstico */
+    score_documentacao: D.doc,
+    score_preco:        D.preco,
+    score_estado:       D.estado,
+    score_global:       D.global,
+    tempo_estimado:     D.tempo,
+    travoes:            D.travoes.map(t => t.t).join(' | ') || 'Nenhum',
+
+    raw: Object.assign({}, A)
+  };
+
+  if (!CFG.webhook) {                       // modo demo
+    console.log('[DEMO] payload que seria enviado ao GoHighLevel:', payload);
+    return;
+  }
+
+  /* Content-Type: application/json — obrigatório.
+     Com text/plain o GHL devolve 200 mas NÃO faz parse do corpo
+     e o mapping fica vazio. keepalive sobrevive ao redirect. */
+  fetch(CFG.webhook, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+    keepalive: true
+  }).catch(err => console.error('Falha no envio do lead:', err));
+}
+
+function finalizar() {
+  if (aEnviar) return;                       // trava duplo clique / duplo lead
+  aEnviar = true;
+
+  const btn = $('#btn-final');
+  btn.disabled = true;
+  btn.textContent = 'A preparar o seu diagnóstico…';
+
+  const D       = diagnosticar();
+  const tel     = normalizarTel(A.tel);
+  const partes  = (A.nome || '').trim().split(/\s+/);
+  const first   = partes[0] || '';
+  const last    = partes.slice(1).join(' ') || '';
+  const eventId = 'lead-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8);
+
+  /* 1) guardar PRIMEIRO — a página de resultado lê daqui */
+  try {
+    sessionStorage.setItem(CFG.chaveSessao, JSON.stringify({ A, D, eventId, ts: Date.now() }));
+  } catch (e) {}
+
+  /* 2) Advanced Matching antes do evento (o pixel faz o hash sozinho) */
+  if (PIXEL_ATIVO && typeof fbq === 'function') {
+    fbq('init', PIXEL_ID, { em: A.email, ph: tel, fn: first, ln: last });
+
+    /* 3) Lead disparado UMA única vez, aqui. Nunca no resultado.
+          Sem value/currency: o score não é receita e poluiria o ROAS. */
+    fbq('track', 'Lead', {
+      content_name:     CFG.origem,
+      content_category: CFG.marca
+    }, { eventID: eventId });
+  }
+
+  /* 4) webhook (keepalive sobrevive à navegação) */
+  enviarWebhook(tel, first, last, D, eventId);
+
+  /* 5) SÓ AGORA o redirect. Sem este atraso o window.location
+        cancela o pedido do pixel e a conversão desaparece. */
+  let jaFoi = false;
+  const ir = () => { if (jaFoi) return; jaFoi = true; window.location.href = 'resultado.html'; };
+  setTimeout(ir, 800);
+  setTimeout(ir, 2500);                      // fallback de segurança
+}
+</script>
+</body>
+</html>

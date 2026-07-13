@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>O seu diagnóstico de venda — Nova Casa</title>
+<meta name="robots" content="noindex, nofollow">
+
+<!-- ══════════════════════════════════════════════════════════════
+     GUARDA + PIXEL
+
+     A ordem aqui é deliberada e não deve ser trocada:
+     verificamos o sessionStorage ANTES de disparar o PageView.
+     Se o pixel estivesse no topo do <head> (como é hábito), qualquer
+     bot, scraper de preview de link ou pessoa que abrisse este URL
+     à mão gerava uma conversão fantasma — porque o PageView deste
+     URL é exatamente o que alimenta a conversão personalizada.
+     ══════════════════════════════════════════════════════════════ -->
+<script>
+  var PIXEL_ID = 'PIXEL_ID_AQUI';
+  var PIXEL_ATIVO = PIXEL_ID.indexOf('AQUI') === -1;
+  var CHAVE = 'diag_novacasa';
+
+  var bruto = null;
+  try { bruto = sessionStorage.getItem(CHAVE); } catch (e) {}
+
+  if (!bruto) {
+    /* sem dados = ninguém fez o quiz. Não dispara pixel nenhum. */
+    window.location.replace('index.html');
+  } else if (PIXEL_ATIVO) {
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
+    (window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', PIXEL_ID);
+
+    /* PageView uma única vez por diagnóstico — um refresh da página
+       não pode contar uma segunda conversão. */
+    var jaContou = false;
+    try { jaContou = sessionStorage.getItem(CHAVE + '_pv') === '1'; } catch (e) {}
+    if (!jaContou) {
+      fbq('track', 'PageView');
+      try { sessionStorage.setItem(CHAVE + '_pv', '1'); } catch (e) {}
+    }
+    /* NÃO se dispara 'Lead' aqui — já foi disparado no index. */
+  }
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --principal:#0E4D45; --destaque:#C2703D; --fundo:#F7F4EF;
+  --texto:#14201E; --texto-suave:#5C6B67; --borda:#E2DCD1; --branco:#FFFFFF;
+  --bom:#2E7D5B; --medio:#C2703D; --mau:#C0392B;
+  --radius:14px; --shadow:0 1px 2px rgba(20,32,30,.04), 0 10px 34px rgba(20,32,30,.07);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background:var(--fundo);color:var(--texto);line-height:1.6;-webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-family:'Fraunces',Georgia,serif;font-weight:600;line-height:1.2;letter-spacing:-.01em}
+.wrap{max-width:660px;margin:0 auto;padding:0 22px 64px}
+
+/* ── cabeçalho + veredicto ── */
+.cab{
+  background:linear-gradient(165deg,#0E4D45 0%,#093430 100%);
+  color:#fff;padding:30px 22px 44px;
+}
+.cab-inner{max-width:660px;margin:0 auto}
+.logo{display:inline-flex;align-items:center;gap:10px;margin-bottom:40px}
+.logo-mark{
+  width:36px;height:36px;border-radius:9px;background:var(--destaque);display:grid;place-items:center;
+  font-family:'Fraunces',serif;font-weight:600;font-size:14px;color:#fff;
+}
+.logo-nome{font-family:'Fraunces',serif;font-size:15px;letter-spacing:.05em;text-transform:uppercase}
+
+.veredicto-rot{
+  font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  color:#E8C9A9;font-weight:500;margin-bottom:12px;
+}
+.tempo{font-size:clamp(34px,9vw,52px);font-family:'Fraunces',serif;font-weight:600;line-height:1.05;margin-bottom:12px}
+.tempo-nota{color:rgba(255,255,255,.8);font-size:16px;max-width:460px}
+.tempo-aviso{
+  margin-top:22px;font-size:12.5px;color:rgba(255,255,255,.55);
+  border-top:1px solid rgba(255,255,255,.13);padding-top:14px;
+}
+
+/* ── cartões ── */
+.card{
+  background:var(--branco);border:1px solid var(--borda);border-radius:var(--radius);
+  padding:26px 22px;box-shadow:var(--shadow);margin-top:-24px;position:relative;
+}
+.card + .card{margin-top:16px}
+.card h2{font-size:20px;margin-bottom:5px}
+.card .sub{color:var(--texto-suave);font-size:14px;margin-bottom:22px}
+
+/* ── eixos ── */
+.eixo + .eixo{margin-top:20px}
+.eixo-topo{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.eixo-nome{font-size:14.5px;font-weight:600}
+.eixo-nome small{display:block;font-weight:400;font-size:12.5px;color:var(--texto-suave);margin-top:1px}
+.eixo-val{font-family:'Fraunces',serif;font-size:19px;font-weight:600;flex:none;padding-left:14px}
+.trilho{height:8px;background:#EFEAE1;border-radius:99px;overflow:hidden}
+.trilho i{display:block;height:100%;width:0;border-radius:99px;transition:width 1.1s cubic-bezier(.2,.7,.3,1)}
+.bom .trilho i,.bom .eixo-val{background:var(--bom)} .bom .eixo-val{background:none;color:var(--bom)}
+.medio .trilho i{background:var(--medio)} .medio .eixo-val{color:var(--medio)}
+.mau .trilho i{background:var(--mau)} .mau .eixo-val{color:var(--mau)}
+
+/* ── checklist documentos ── */
+.doc{
+  display:flex;align-items:flex-start;gap:12px;padding:13px 0;border-bottom:1px solid #F0EBE2;
+}
+.doc:last-child{border-bottom:0;padding-bottom:0}
+.doc-icon{
+  width:22px;height:22px;border-radius:50%;flex:none;display:grid;place-items:center;
+  font-size:12px;font-weight:700;margin-top:1px;
+}
+.doc.tem .doc-icon{background:#E4F1EB;color:var(--bom)}
+.doc.falta .doc-icon{background:#FBEBE8;color:var(--mau)}
+.doc-txt b{display:block;font-size:14.5px;font-weight:600}
+.doc-txt span{font-size:13px;color:var(--texto-suave)}
+.doc.falta .doc-txt b{color:var(--mau)}
+.doc-tag{
+  display:inline-block;margin-top:4px;font-size:11px;font-weight:600;letter-spacing:.04em;
+  text-transform:uppercase;background:#FBEBE8;color:var(--mau);padding:2px 7px;border-radius:5px;
+}
+
+/* ── travões ── */
+.travao{display:flex;gap:14px;padding:18px 0;border-bottom:1px solid #F0EBE2}
+.travao:last-child{border-bottom:0;padding-bottom:0}
+.travao-num{
+  font-family:'Fraunces',serif;font-size:15px;font-weight:600;color:var(--destaque);
+  flex:none;width:26px;padding-top:1px;
+}
+.travao b{display:block;font-size:15px;margin-bottom:3px}
+.travao p{font-size:14px;color:var(--texto-suave)}
+.sem-travoes{
+  display:flex;gap:12px;align-items:center;background:#EDF5F1;border-radius:11px;padding:16px;
+  font-size:14.5px;color:var(--bom);font-weight:500;
+}
+
+/* ── próximo passo ── */
+.passo-n{display:flex;gap:14px;padding:14px 0}
+.passo-n:not(:last-child){border-bottom:1px solid #F0EBE2}
+.passo-n-num{
+  width:26px;height:26px;border-radius:50%;background:var(--principal);color:#fff;flex:none;
+  display:grid;place-items:center;font-size:12.5px;font-weight:600;
+}
+.passo-n b{display:block;font-size:14.5px;margin-bottom:2px}
+.passo-n p{font-size:13.5px;color:var(--texto-suave)}
+
+/* ── CTA ── */
+.cta{
+  background:linear-gradient(165deg,#0E4D45 0%,#093430 100%);color:#fff;
+  border-radius:var(--radius);padding:30px 22px;margin-top:16px;text-align:center;
+}
+.cta h2{font-size:23px;margin-bottom:10px}
+.cta h2 em{font-style:italic;color:#E8C9A9;font-weight:400}
+.cta p{color:rgba(255,255,255,.78);font-size:14.5px;margin-bottom:24px}
+.btn{
+  display:flex;align-items:center;justify-content:center;gap:9px;width:100%;
+  padding:16px 20px;border-radius:12px;font:600 15.5px 'Inter',sans-serif;
+  text-decoration:none;border:0;cursor:pointer;transition:transform .15s ease;
+}
+.btn:active{transform:scale(.985)}
+.btn + .btn{margin-top:9px}
+.btn-wa{background:#25D366;color:#0A2B18}
+.btn-tel{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.22)}
+.btn-ig{background:transparent;color:rgba(255,255,255,.68);font-weight:500;font-size:14px}
+
+.nota{
+  text-align:center;font-size:12px;color:var(--texto-suave);margin-top:26px;line-height:1.55;
+}
+@media(min-width:560px){ .cab{padding:36px 32px 48px} .card{padding:30px 28px} }
+</style>
+</head>
+<body>
+
+<header class="cab">
+  <div class="cab-inner">
+    <div class="logo">
+      <span class="logo-mark" aria-hidden="true">NC</span>
+      <span class="logo-nome">Nova Casa</span>
+    </div>
+    <p class="veredicto-rot">O seu diagnóstico · <span id="nome-lead">—</span></p>
+    <h1 class="tempo" id="tempo">—</h1>
+    <p class="tempo-nota" id="tempo-nota">—</p>
+    <p class="tempo-aviso">Estimativa indicativa, calculada a partir das suas respostas. Não substitui uma avaliação presencial.</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- ── 3 EIXOS ── -->
+  <section class="card">
+    <h2>Onde está a sua casa hoje</h2>
+    <p class="sub">Três fatores decidem se uma casa vende depressa. Estes são os seus.</p>
+
+    <div class="eixo" id="eixo-doc">
+      <div class="eixo-topo">
+        <span class="eixo-nome">Documentação<small>Está tudo pronto para escritura?</small></span>
+        <span class="eixo-val"><span id="v-doc">0</span>%</span>
+      </div>
+      <div class="trilho"><i id="b-doc"></i></div>
+    </div>
+
+    <div class="eixo" id="eixo-preco">
+      <div class="eixo-topo">
+        <span class="eixo-nome">Preço vs. mercado<small>O valor está ancorado na realidade?</small></span>
+        <span class="eixo-val"><span id="v-preco">0</span>%</span>
+      </div>
+      <div class="trilho"><i id="b-preco"></i></div>
+    </div>
+
+    <div class="eixo" id="eixo-estado">
+      <div class="eixo-topo">
+        <span class="eixo-nome">Estado e prontidão<small>O imóvel está em condições de ser visitado?</small></span>
+        <span class="eixo-val"><span id="v-estado">0</span>%</span>
+      </div>
+      <div class="trilho"><i id="b-estado"></i></div>
+    </div>
+  </section>
+
+  <!-- ── CHECKLIST DE DOCUMENTOS ── -->
+  <section class="card">
+    <h2>A sua checklist de documentos</h2>
+    <p class="sub" id="doc-sub">—</p>
+    <div id="lista-docs"></div>
+  </section>
+
+  <!-- ── TRAVÕES ── -->
+  <section class="card">
+    <h2>O que está a travar a sua venda</h2>
+    <p class="sub">Identificado a partir das respostas que nos deu.</p>
+    <div id="lista-travoes"></div>
+  </section>
+
+  <!-- ── PRÓXIMOS PASSOS ── -->
+  <section class="card">
+    <h2>O que fazer a seguir</h2>
+    <p class="sub">Por esta ordem — é o que separa uma venda de 2 meses de uma de 8.</p>
+    <div id="lista-passos"></div>
+  </section>
+
+  <!-- ── CTA ── -->
+  <section class="cta">
+    <h2>Quer saber quanto vale <em>mesmo</em> a sua casa?</h2>
+    <p id="cta-texto">A avaliação presencial é gratuita e sem compromisso. Em 30 minutos, sabe o valor real de mercado do seu imóvel — e o que fazer com os travões que identificámos.</p>
+    <a class="btn btn-wa" id="cta-wa" href="#" target="_blank" rel="noopener">
+      <span aria-hidden="true">💬</span> Falar por WhatsApp
+    </a>
+    <a class="btn btn-tel" id="cta-tel" href="#">
+      <span aria-hidden="true">📞</span> Ligar agora
+    </a>
+    <a class="btn btn-ig" id="cta-ig" href="#" target="_blank" rel="noopener">Ver os nossos imóveis no Instagram</a>
+  </section>
+
+  <p class="nota">
+    Diagnóstico gerado automaticamente com base nas suas respostas. Não constitui avaliação imobiliária
+    nem aconselhamento jurídico ou fiscal.<br>© Nova Casa
+  </p>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════════════════════
+   BLOCO 1 · CONFIGURAÇÃO (substituir por cliente)
+   ══════════════════════════════════════════════════════════════ */
+const CFG = {
+  marca:      'Nova Casa',
+  whatsapp:   '351900000000',                                     // ← só dígitos
+  msgWhats:   'Olá! Fiz o diagnóstico de venda no vosso site e queria falar sobre o meu imóvel.',
+  telefone:   '+351900000000',
+  instagram:  'https://instagram.com/',
+  chaveSessao:'diag_novacasa'
+};
+
+/* ── ler os dados do diagnóstico ── */
+let dados = null;
+try { dados = JSON.parse(sessionStorage.getItem(CFG.chaveSessao)); } catch (e) {}
+if (!dados) { window.location.replace('index.html'); }
+
+const A = dados.A, D = dados.D;
+const $ = s => document.querySelector(s);
+
+/* ── veredicto ── */
+$('#nome-lead').textContent = (A.nome || '').split(' ')[0] || 'A sua casa';
+$('#tempo').textContent = D.tempo;
+$('#tempo-nota').textContent = D.tempoNota;
+document.title = `Vende em ${D.tempo} — diagnóstico ${CFG.marca}`;
+
+/* ── eixos (barras animadas) ── */
+const classe = v => v >= 70 ? 'bom' : v >= 45 ? 'medio' : 'mau';
+[['doc', D.doc], ['preco', D.preco], ['estado', D.estado]].forEach(([k, v]) => {
+  $('#v-' + k).textContent = v;
+  $('#eixo-' + k).classList.add(classe(v));
+  setTimeout(() => { $('#b-' + k).style.width = v + '%'; }, 220);
+});
+
+/* ── checklist de documentos ── */
+const DOCS = [
+  { n: 'Caderneta predial',    d: 'Emitida no Portal das Finanças, gratuita e imediata.' },
+  { n: 'Certidão permanente',  d: 'Pedida no Registo Predial. Prova quem é o dono e que encargos existem.' },
+  { n: 'Licença de utilização',d: 'Pedida na Câmara Municipal. Pode demorar semanas — comece cedo.' },
+  { n: 'Certificado energético', d: 'Obrigatório para anunciar. Sem ele não pode publicar a casa nos portais.', critico: true }
+];
+const tem = D.temDocs || [];
+$('#doc-sub').textContent = D.emFalta.length === 0
+  ? 'Tem tudo. Está pronto para ir a mercado sem atrasos burocráticos.'
+  : `Faltam-lhe ${D.emFalta.length} ${D.emFalta.length === 1 ? 'documento' : 'documentos'}. É a causa nº1 de vendas que arrastam.`;
+
+$('#lista-docs').innerHTML = DOCS.map(doc => {
+  const ok = tem.includes(doc.n);
+  return `<div class="doc ${ok ? 'tem' : 'falta'}">
+      <span class="doc-icon" aria-hidden="true">${ok ? '✓' : '✕'}</span>
+      <span class="doc-txt">
+        <b>${doc.n}</b>
+        <span>${doc.d}</span>
+        ${(!ok && doc.critico) ? '<span class="doc-tag">Bloqueia o anúncio</span>' : ''}
+      </span>
+    </div>`;
+}).join('');
+
+/* ── travões ── */
+$('#lista-travoes').innerHTML = D.travoes.length
+  ? D.travoes.map((t, i) => `<div class="travao">
+        <span class="travao-num" aria-hidden="true">0${i + 1}</span>
+        <span><b>${t.t}</b><p>${t.d}</p></span>
+      </div>`).join('')
+  : `<div class="sem-travoes"><span aria-hidden="true">✓</span>
+       Não identificámos travões críticos. A sua venda tem tudo para correr depressa.</div>`;
+
+/* ── próximos passos (dinâmicos, pela ordem certa) ── */
+const passos = [];
+if (D.emFalta.includes('Certificado energético'))
+  passos.push({ b: 'Peça já o certificado energético', p: 'É o único documento que o impede legalmente de anunciar. Tudo o resto pode andar em paralelo.' });
+if (D.doc < 70)
+  passos.push({ b: 'Reúna a documentação em falta', p: 'A caderneta e a certidão são imediatas e online. A licença de utilização é a que demora — trate dela primeiro.' });
+if (A.acordo === 'Ainda não há acordo' || A.acordo === 'Não sei')
+  passos.push({ b: 'Feche o acordo entre proprietários', p: 'Antes de mostrar a casa a quem quer que seja. Um comprador perdido por falta de acordo raramente volta.' });
+if (D.preco < 70)
+  passos.push({ b: 'Descubra o valor real de mercado', p: 'Uma avaliação profissional evita o erro mais caro: anunciar acima do valor e queimar as primeiras semanas, que são as que trazem mais visitas.' });
+if (A.ocupacao === 'Está arrendado')
+  passos.push({ b: 'Defina a estratégia com o inquilino', p: 'Vender com contrato ativo, negociar a saída ou vender a investidores — são três caminhos com preços muito diferentes.' });
+passos.push({ b: 'Prepare a casa para as visitas', p: 'Fotografia profissional e uma casa arrumada mudam o número de contactos nas primeiras duas semanas. É onde se ganha ou perde a venda.' });
+
+$('#lista-passos').innerHTML = passos.slice(0, 4).map((p, i) =>
+  `<div class="passo-n">
+     <span class="passo-n-num" aria-hidden="true">${i + 1}</span>
+     <span><b>${p.b}</b><p>${p.p}</p></span>
+   </div>`).join('');
+
+/* ── CTAs personalizados ── */
+const contexto = `Olá! Fiz o diagnóstico de venda e o resultado foi "${D.tempo}". Tenho ${A.tipo || 'um imóvel'}${A.tipologia ? ' ' + A.tipologia : ''} em ${A.concelho || ''}. Queria falar sobre a avaliação.`;
+$('#cta-wa').href  = `https://wa.me/${CFG.whatsapp}?text=${encodeURIComponent(contexto)}`;
+$('#cta-tel').href = `tel:${CFG.telefone}`;
+$('#cta-ig').href  = CFG.instagram;
+
+if (A.avaliacao === 'Sim, quero marcar') {
+  $('#cta-texto').textContent = 'Disse-nos que quer marcar a avaliação — vamos tratar disso. Escolha por onde prefere falar e agendamos nas próximas 48 horas.';
+}
+</script>
+</body>
+</html>
