@@ -21,13 +21,14 @@
   var PIXEL_ATIVO = PIXEL_ID.indexOf('AQUI') === -1;
   var CHAVE = 'diag_novacasa';
 
-  var bruto = null;
+  var bruto = null, consentiu = false;
   try { bruto = sessionStorage.getItem(CHAVE); } catch (e) {}
+  try { consentiu = localStorage.getItem('nc_cookies') === 'aceite'; } catch (e) {}
 
   if (!bruto) {
     /* sem dados = ninguém fez o quiz. Não dispara pixel nenhum. */
     window.location.replace('index.html');
-  } else if (PIXEL_ATIVO) {
+  } else if (PIXEL_ATIVO && consentiu) {
     !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
     n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
     n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;

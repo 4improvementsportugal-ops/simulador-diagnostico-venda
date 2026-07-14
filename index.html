@@ -13,7 +13,13 @@
 <script>
   var PIXEL_ID = 'PIXEL_ID_AQUI';
   var PIXEL_ATIVO = PIXEL_ID.indexOf('AQUI') === -1;
-  if (PIXEL_ATIVO) {
+  var CHAVE_CONSENTIMENTO = 'nc_cookies';
+
+  /* O pixel NÃO carrega automaticamente.
+     A diretiva ePrivacy exige consentimento PRÉVIO para cookies de
+     publicidade — só depois do "Aceitar" é que isto corre. */
+  function carregarPixel() {
+    if (!PIXEL_ATIVO || window.fbq) return;
     !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
     n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
     n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
@@ -22,8 +28,12 @@
     fbq('init', PIXEL_ID);
     fbq('track', 'PageView');
   }
+
+  function temConsentimento() {
+    try { return localStorage.getItem(CHAVE_CONSENTIMENTO) === 'aceite'; } catch (e) { return false; }
+  }
+  if (temConsentimento()) carregarPixel();
 </script>
-<noscript><img height="1" width="1" style="display:none" alt="" src="https://www.facebook.com/tr?id=PIXEL_ID_AQUI&ev=PageView&noscript=1"/></noscript>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -245,6 +255,30 @@ select{
   max-width:640px;margin:44px auto 0;padding:0 22px;
   font-size:12px;color:var(--texto-suave);text-align:center;
 }
+.rodape a{color:var(--texto-suave)}
+
+/* ─────────── BANNER DE COOKIES ─────────── */
+.cookies{
+  position:fixed;left:12px;right:12px;bottom:12px;z-index:100;
+  background:var(--branco);border:1px solid var(--borda);border-radius:14px;
+  padding:17px 18px;box-shadow:0 10px 40px rgba(20,32,30,.18);
+  max-width:520px;margin:0 auto;
+  animation:sobeBanner .4s cubic-bezier(.4,0,.2,1);
+}
+.cookies[hidden]{display:none}
+@keyframes sobeBanner{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.cookies p{font-size:13.5px;color:var(--texto-suave);line-height:1.5;margin-bottom:14px}
+.cookies p b{color:var(--texto)}
+.cookies a{color:var(--principal);font-weight:500}
+.cookies-btns{display:flex;gap:8px}
+.cookies-btns button{
+  flex:1;padding:11px 14px;border-radius:10px;cursor:pointer;
+  font:600 14px 'Inter',sans-serif;border:1px solid var(--borda);transition:all .15s ease;
+}
+#ck-recusar{background:transparent;color:var(--texto-suave)}
+#ck-recusar:hover{background:#F4F1EA}
+#ck-aceitar{background:var(--principal);color:#fff;border-color:var(--principal)}
+#ck-aceitar:hover{background:#0B3F39}
 /* ecrãs baixos (ex: iPhone SE) — encolhe a foto para o CTA não sair do ecrã */
 @media(max-height:700px){
   .foto{max-height:26svh}
@@ -627,8 +661,24 @@ select{
     </section>
   </form>
 
-  <p class="rodape">Diagnóstico indicativo, sem valor de avaliação oficial. © Nova Casa</p>
+  <p class="rodape">
+    Diagnóstico indicativo, sem valor de avaliação oficial. © Nova Casa ·
+    <a href="privacidade.html" target="_blank" rel="noopener">Política de privacidade</a>
+  </p>
 </main>
+
+<!-- ═══════════════ BANNER DE COOKIES ═══════════════ -->
+<aside class="cookies" id="cookies" role="dialog" aria-live="polite" aria-label="Consentimento de cookies" hidden>
+  <p>
+    <b>Usamos cookies de medição.</b> Servem para percebermos se os nossos anúncios funcionam.
+    Pode recusar — o diagnóstico funciona na mesma.
+    <a href="privacidade.html" target="_blank" rel="noopener">Saber mais</a>
+  </p>
+  <div class="cookies-btns">
+    <button type="button" id="ck-recusar">Recusar</button>
+    <button type="button" id="ck-aceitar">Aceitar</button>
+  </div>
+</aside>
 
 <script>
 /* ══════════════════════════════════════════════════════════════
@@ -652,6 +702,26 @@ let aEnviar = false;
 
 const $  = (s, r=document) => r.querySelector(s);
 const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+
+/* ══════════════════════════════════════════════════════════════
+   CONSENTIMENTO DE COOKIES — o pixel só existe depois do "Aceitar"
+   ══════════════════════════════════════════════════════════════ */
+(function () {
+  const banner = $('#cookies');
+  let escolha = null;
+  try { escolha = localStorage.getItem(CHAVE_CONSENTIMENTO); } catch (e) {}
+
+  if (!escolha) banner.hidden = false;      // ainda não decidiu
+
+  const decidir = valor => {
+    try { localStorage.setItem(CHAVE_CONSENTIMENTO, valor); } catch (e) {}
+    banner.hidden = true;
+    if (valor === 'aceite') carregarPixel();
+  };
+
+  $('#ck-aceitar').addEventListener('click', () => decidir('aceite'));
+  $('#ck-recusar').addEventListener('click', () => decidir('recusado'));
+})();
 
 /* ─── arranque ─── */
 $('#btn-comecar').addEventListener('click', () => {
